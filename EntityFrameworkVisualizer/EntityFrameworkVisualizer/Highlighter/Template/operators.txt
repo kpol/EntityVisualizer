@@ -1,0 +1,17 @@
+﻿all
+and
+any
+between
+cross
+exists
+in
+inner
+is
+join
+left
+like
+not
+null
+or
+outer
+right

@@ -1,0 +1,84 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ output extension=".cs" #>
+<#@ assembly name="System.Core.dll" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
+<#@ import namespace="System.IO" #>
+<#@ include file="SqlTokenType.ttinclude" #>
+
+namespace EntityFrameworkVisualizer.Highlighter.Template
+{
+    /// <summary>
+    /// SQL token type. 
+    /// </summary>
+    public enum SqlTokenType
+    {
+        <# 
+        PushIndent("        ");
+		const string Comment = @"/// <summary>
+/// {0}.
+/// </summary>";
+		
+		var names = Enum.GetNames(typeof(SqlTokenType));
+		for (int i = 0; i < names.Length; i++)
+		{
+			WriteLine(Comment, names[i]);
+			var prefix = i == names.Length - 1 ? string.Empty : "," + Environment.NewLine;
+			WriteLine("{0}{1}", names[i], prefix);
+		}
+        PopIndent();#>
+    }
+
+    /// <summary>
+    /// Regex helper.
+    /// </summary>
+    internal class RegexHelper
+    {
+        /// <summary>
+        /// Gets SQL source code regex pattern..
+        /// </summary>
+        public static string SqlPattern =>
+                <# 
+                var keywords = File.ReadAllText(Host.ResolvePath("keywords.txt")).Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Select(s => Regex.Escape(s));
+                var operators = File.ReadAllText(Host.ResolvePath("operators.txt")).Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Select(s => Regex.Escape(s));
+                var functions = File.ReadAllText(Host.ResolvePath("functions.txt")).Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Select(s => Regex.Escape(s));
+                var dataTypes = File.ReadAllText(Host.ResolvePath("datatypes.txt")).Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).Select(s => Regex.Escape(s));
+                #>
+                @"<#= string.Format(FormatRegex,
+                    SqlTokenType.String.ToString(),
+                    SqlTokenType.Comment.ToString(),
+                    SqlTokenType.Keyword.ToString(),
+                    SqlTokenType.Operator.ToString(),
+                    SqlTokenType.Function.ToString(),
+                    SqlTokenType.DataType.ToString(),
+                    string.Join("|", keywords), 
+                    string.Join("|", operators), 
+                    string.Join("|", functions),
+                    string.Join("|", dataTypes)
+                ) #>";
+    }
+}
+
+<#+
+const string FormatRegex = @"(?xsi)
+    (?<continue>\[[^]]*\])
+    |
+    (@\w+)
+    |
+    (?<{0}>N?'(?:[^']|'')*')  # string
+    |
+    (?<{1}>--.*?)[\r\n$]   # comment
+    |
+    (?<{1}>/\*.*?\*/)      # multiline comment
+    |
+    (?<{2}>\b(?:{6})\b)     # keyword
+    |
+    (?<{3}>\b(?:{7})\b)     # operator
+    |
+    (?<{4}>(?<!\w)@@rowcount\b|\b(?:{8})\b)     # function
+    |
+    (?<{5}>\b(?:{9})\b)     # datatype
+    |
+    (?<Sign>[().,;<>=\-+/])  # sign
+    ";
+#>

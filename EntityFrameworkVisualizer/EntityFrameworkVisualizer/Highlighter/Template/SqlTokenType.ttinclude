@@ -1,0 +1,18 @@
+﻿<#+
+public enum SqlTokenType
+{
+    String,
+
+    Comment,
+
+    Keyword,
+
+    Operator,
+
+    Function,
+
+    DataType,
+
+    Sign
+}
+#>
