@@ -77,8 +77,9 @@ namespace EntityFrameworkVisualizer.VisualizerObjectSources.CommandFormatters
             {
                 resultValue = ((DateTime)value).ToString("yyyy-MM-dd HH:mm:ss.fffffffzzzz");
             }
-            else if (value is byte[] array)
+            else if (value is byte[])
             {
+                var array = (byte[])value;
                 resultValue = "0x" + string.Concat(array.Select(b => b.ToString("X2")));
             }
 
