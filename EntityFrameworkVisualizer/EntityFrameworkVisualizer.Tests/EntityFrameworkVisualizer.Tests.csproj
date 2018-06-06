@@ -53,6 +53,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\EntityFrameworkVisualizer\EntityFrameworkVisualizer.csproj">
       <Project>{432a9b89-5db4-4681-861c-95cb3169a0c6}</Project>
       <Name>EntityFrameworkVisualizer</Name>
