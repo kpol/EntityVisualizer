@@ -73,6 +73,7 @@
     </Compile>
     <Compile Include="VisualizerObjectSources\CommandFormatters\SqlCommandFormatter.cs" />
     <Compile Include="VisualizerObjectSources\DbQueryVisualizerObjectSource.cs" />
+    <Compile Include="VisualizerObjectSources\DbSetVisualizerObjectSource.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MainForm.resx">

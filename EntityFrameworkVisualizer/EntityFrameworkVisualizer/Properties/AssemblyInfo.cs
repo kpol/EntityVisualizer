@@ -1,4 +1,5 @@
-﻿using System.Data.Entity.Infrastructure;
+﻿using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -37,4 +38,6 @@ using EntityFrameworkVisualizer.VisualizerObjectSources;
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("3.0.*")]
+
 [assembly: DebuggerVisualizer(typeof(EntitySqlVisualizer), typeof(DbQueryVisualizerObjectSource), Target = typeof(DbQuery<>), Description = "Entity SQL Visualizer")]
+[assembly: DebuggerVisualizer(typeof(EntitySqlVisualizer), typeof(SimpleVisualizerObjectSource), Target = typeof(DbSet<>), Description = "Entity SQL Visualizer")]
