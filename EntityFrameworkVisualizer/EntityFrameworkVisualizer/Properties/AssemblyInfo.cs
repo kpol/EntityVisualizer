@@ -40,4 +40,3 @@ using EntityFrameworkVisualizer.VisualizerObjectSources;
 [assembly: AssemblyVersion("3.0.*")]
 
 [assembly: DebuggerVisualizer(typeof(EntitySqlVisualizer), typeof(DbQueryVisualizerObjectSource), Target = typeof(DbQuery<>), Description = "Entity SQL Visualizer")]
-[assembly: DebuggerVisualizer(typeof(EntitySqlVisualizer), typeof(SimpleVisualizerObjectSource), Target = typeof(DbSet<>), Description = "Entity SQL Visualizer")]

@@ -1,4 +1,5 @@
-﻿using System.Data.Entity.Core.Objects;
+﻿using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -20,24 +21,38 @@ namespace EntityFrameworkVisualizer.VisualizerObjectSources
         /// <param name="outgoingData">Outgoing data stream.</param>
         public override void GetData(object target, Stream outgoingData)
         {
-            var queryObject = GetQueryFromQueryable((IQueryable)target);
-
-            var stringBuilder = new StringBuilder();
-
-            foreach (var item in queryObject.Parameters)
+            if (target == null)
             {
-                stringBuilder.AppendLine(SqlCommandFormatter.DeclareParameter(item.Name, item.ParameterType, item.Value));
+                return;
             }
 
-            stringBuilder.AppendLine();
-            stringBuilder.AppendLine(target.ToString());
-
             var writer = new StreamWriter(outgoingData);
-            writer.WriteLine(stringBuilder.ToString());
+
+            if (target.GetType().GetGenericTypeDefinition() == typeof(DbSet<>))
+            {
+                writer.WriteLine(target.ToString());
+            }
+            else
+            {
+                var queryObject = GetQueryFromQueryable(target);
+
+                var stringBuilder = new StringBuilder();
+
+                foreach (var item in queryObject.Parameters)
+                {
+                    stringBuilder.AppendLine(SqlCommandFormatter.DeclareParameter(item.Name, item.ParameterType, item.Value));
+                }
+
+                stringBuilder.AppendLine();
+                stringBuilder.AppendLine(target.ToString());
+
+                writer.WriteLine(stringBuilder.ToString());
+            }
+
             writer.Flush();
         }
 
-        private static ObjectQuery GetQueryFromQueryable(IQueryable query)
+        private static ObjectQuery GetQueryFromQueryable(object query)
         {
             var internalQueryField = query.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance).FirstOrDefault(f => f.Name.Equals("_internalQuery"));
             var internalQuery = internalQueryField?.GetValue(query);
