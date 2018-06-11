@@ -1,7 +1,5 @@
-﻿using System.Data.Entity;
-using System.Data.Entity.Infrastructure;
+﻿using System.Data.Entity.Infrastructure;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using EntityFrameworkVisualizer;
@@ -37,6 +35,6 @@ using EntityFrameworkVisualizer.VisualizerObjectSources;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.0.*")]
+[assembly: AssemblyVersion("3.1.*")]
 
 [assembly: DebuggerVisualizer(typeof(EntitySqlVisualizer), typeof(DbQueryVisualizerObjectSource), Target = typeof(DbQuery<>), Description = "Entity SQL Visualizer")]
